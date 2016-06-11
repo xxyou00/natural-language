@@ -30,7 +30,7 @@ public class LanguageProcessor {
      */
     public Intent getIntent(String message) {
         float score = 0.0f;
-        Intent best = null;
+        Intent best = new Intent("None");
 
         for (IntentMatcher intentMatcher : intentMatchers) {
             IntentBuilder builder = new IntentBuilder();

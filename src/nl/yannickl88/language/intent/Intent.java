@@ -1,5 +1,6 @@
 package nl.yannickl88.language.intent;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -15,6 +16,10 @@ public class Intent {
      */
     public final String action;
     private Map<String, Entity> entities;
+
+    public Intent(String action) {
+        this(action, new HashMap<>());
+    }
 
     public Intent(String action, Map<String, Entity> entities) {
         this.action = action;
