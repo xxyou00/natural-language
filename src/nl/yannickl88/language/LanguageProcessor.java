@@ -26,7 +26,7 @@ public class LanguageProcessor {
     /**
      * Return the intent of a message. This is based all configured intents in
      * the processor and selects the best matching Intent. If no match can be
-     * found, NULL is returned.
+     * found, an Intent with action "None" is returned.
      */
     public Intent getIntent(String message) {
         float score = 0.0f;
