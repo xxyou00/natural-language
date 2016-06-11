@@ -1,0 +1,6 @@
+<!ELEMENT intents (intent)*>
+<!ELEMENT intent (utterance|matcher)*>
+<!ATTLIST intent
+        action CDATA #REQUIRED>
+<!ELEMENT utterance (#PCDATA)>
+<!ELEMENT matcher (#PCDATA)>
