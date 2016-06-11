@@ -58,3 +58,78 @@ if (intent.action.equals("Create.Order")) {
 ```
 
 And that is it.
+
+## Custom entities
+To create your own Entities to use in intents, simply implement the `EntityMatcherInterface` and you can start using this in your intents. The `<matcher></matcher>` tags accept a fully qualified namespace for your class.
+
+For example, if you need an order item:
+```java
+package com.acme.language;
+
+import nl.yannickl88.language.intent.Entity;
+import nl.yannickl88.language.EntityMatcherInterface;
+import nl.yannickl88.language.matcher.EntityMatch;
+
+public class FoodItem implements EntityMatcherInterface {
+    private String[] items = new String[] {
+        "pizza",
+        "lasagna",
+        "pasta"
+    };
+
+    @Override
+    public EntityMatch match(String message) {
+        for (String item : items) {
+            if (message.toLowerCase().contains(item)) {
+                return new EntityMatch(1, "Food.Item", new Entity(item));
+            }
+        }
+
+        // No result, simply return an empty EntityMatch.
+        return new EntityMatch();
+    }
+
+    @Override
+    public int hashCode() {
+        // Give it a class-unique hash code, this ensures only one entity per type.
+        return "Food.Item".hashCode();
+    }
+}
+```
+
+You can then use the entity in your intents:
+
+```xml
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE intents PUBLIC "-//yannickl88//DTD Intents//EN"
+  "https://yannickl88.github.io/natural-language/intents.dtd">
+
+<intents>
+
+    <!-- ... -->
+
+    <!-- Orderings -->
+    <intent action="Create.Order">
+        <utterance>i would like to order</utterance>
+        <matcher>com.acme.language.FoodItem</matcher>
+    </intent>
+
+    <!-- ... -->
+
+</intents>
+```
+
+And if you have a message matching your intent, you can use your Entity as follows:
+
+```java
+Intent intent = this.processor.getIntent("...");
+
+if (intent.action.equals("Create.Order")) {
+    Entity item = intent.getEntity("Create.Order");
+    if (null != item) {
+        System.out.println("OK! Thanks for your order (" + item.value + ")");
+    } else {
+        System.out.println("Sorry, you need to give me a number to order.");
+    }
+}
+```
