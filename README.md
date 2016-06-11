@@ -125,7 +125,7 @@ And if you have a message matching your intent, you can use your Entity as follo
 Intent intent = this.processor.getIntent("...");
 
 if (intent.action.equals("Create.Order")) {
-    Entity item = intent.getEntity("Create.Order");
+    Entity item = intent.getEntity("Food.Item");
     if (null != item) {
         System.out.println("OK! Thanks for your order (" + item.value + ")");
     } else {
