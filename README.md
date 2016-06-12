@@ -60,7 +60,7 @@ if (intent.action.equals("Create.Order")) {
 And that is it.
 
 ## Custom entities
-To create your own Entities to use in intents, simply implement the `EntityMatcherInterface` and you can start using this in your intents. The `<matcher></matcher>` tags accept a fully qualified namespace for your class.
+To create your own Entities to use in intents, simply implement the `EntityMatchable` interface and you can start using this in your intents. The `<matcher></matcher>` tags accept a fully qualified namespace for your class.
 
 For example, if you need an order item:
 ```java
