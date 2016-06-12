@@ -24,11 +24,11 @@ public class IntentMatcherLoader {
     /**
      * Load a configuration file into the given LanguageProcessor.
      */
-    public void load(LanguageProcessor processor, String file) {
+    public void load(IntentMatcherLoadable processor, File file) {
         try {
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-            Document doc = dBuilder.parse(new File(file));
+            Document doc = dBuilder.parse(file);
 
             doc.getDocumentElement().normalize();
 
@@ -51,7 +51,11 @@ public class IntentMatcherLoader {
                             intent.addMatcher(new StaticWord(word));
                         }
                     } else if ("matcher".equals(matcher.getNodeName())) {
-                        intent.addMatcher(this.getWordMatcherLoader(matcher.getFirstChild().getTextContent()));
+                        EntityMatchable matcherLoader = this.getWordMatcherLoader(matcher.getFirstChild().getTextContent());
+
+                        if (null != matcherLoader) {
+                            intent.addMatcher(matcherLoader);
+                        }
                     }
                 }
 
@@ -59,7 +63,7 @@ public class IntentMatcherLoader {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            return;
         }
     }
 
@@ -75,11 +79,11 @@ public class IntentMatcherLoader {
         return words;
     }
 
-    private EntityMatcherInterface getWordMatcherLoader(String matcherName) {
+    private EntityMatchable getWordMatcherLoader(String matcherName) {
         try {
             Class c = Class.forName(matcherName);
 
-            return (EntityMatcherInterface) c.newInstance();
+            return (EntityMatchable) c.newInstance();
         } catch (IllegalAccessException | InstantiationException | ClassNotFoundException e) {
             return null;
         }

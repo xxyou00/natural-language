@@ -67,7 +67,7 @@ For example, if you need an order item:
 package com.acme.language;
 
 import nl.yannickl88.language.intent.Entity;
-import nl.yannickl88.language.EntityMatcherInterface;
+import nl.yannickl88.language.EntityMatchable;
 import nl.yannickl88.language.matcher.EntityMatch;
 
 public class FoodItem implements EntityMatcherInterface {

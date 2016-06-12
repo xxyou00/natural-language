@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE intents PUBLIC "-//yannickl88//DTD Intents//EN"
+        "https://yannickl88.github.io/natural-language/intents.dtd">
+
+<intents>
+
+    <!-- Just Utterances -->
+    <intent action="Foo.Bar">
+        <utterance>Foo Bar</utterance>
+    </intent>
+    <intent action="Foo.Bar">
+        <utterance>Baz</utterance>
+    </intent>
+
+    <!-- Just Entities -->
+    <intent action="Foo.Number">
+        <matcher>nl.yannickl88.language.matcher.buildins.Number</matcher>
+    </intent>
+
+    <!-- Entity and Utterance -->
+    <intent action="Foo.All">
+        <utterance>foobar</utterance>
+        <matcher>nl.yannickl88.language.matcher.buildins.Number</matcher>
+    </intent>
+
+</intents>

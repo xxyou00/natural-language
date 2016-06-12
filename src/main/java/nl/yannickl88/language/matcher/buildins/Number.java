@@ -1,7 +1,7 @@
 package nl.yannickl88.language.matcher.buildins;
 
+import nl.yannickl88.language.EntityMatchable;
 import nl.yannickl88.language.intent.Entity;
-import nl.yannickl88.language.EntityMatcherInterface;
 import nl.yannickl88.language.matcher.EntityMatch;
 
 import java.util.regex.Matcher;
@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
  * The number EntityMatcher allows for extracting numbers from messages. These
  * can be in the format 42 or 1032.
  */
-public class Number implements EntityMatcherInterface {
+public class Number implements EntityMatchable {
     private Pattern numberPattern;
 
     public Number() {
@@ -27,10 +27,5 @@ public class Number implements EntityMatcherInterface {
         }
 
         return new EntityMatch();
-    }
-
-    @Override
-    public int hashCode() {
-        return "number".hashCode();
     }
 }

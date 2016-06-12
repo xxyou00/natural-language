@@ -1,6 +1,8 @@
 package nl.yannickl88.language.intent;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -32,5 +34,12 @@ public class Intent {
      */
     public Entity getEntity(String s) {
         return entities.get(s);
+    }
+
+    /**
+     * Return all entity names that are associated with this intent.
+     */
+    public List<String> getEntityNames() {
+        return new ArrayList<>(entities.keySet());
     }
 }

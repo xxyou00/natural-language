@@ -12,14 +12,14 @@ import java.util.List;
  *
  * @see IntentMatcherLoader
  */
-public class LanguageProcessor {
+public class LanguageProcessor implements IntentMatcherLoadable {
     private List<IntentMatcher> intentMatchers;
 
     public LanguageProcessor() {
         this.intentMatchers = new ArrayList<>();
     }
 
-    void addIntentMatcher(IntentMatcher intent) {
+    public void addIntentMatcher(IntentMatcher intent) {
         this.intentMatchers.add(intent);
     }
 
@@ -51,7 +51,7 @@ public class LanguageProcessor {
         float score = 0.0f;
         int count   = 0;
 
-        for (EntityMatcherInterface utteranceWord : intentMatcher.getWords()) {
+        for (EntityMatchable utteranceWord : intentMatcher.getWords()) {
             EntityMatch match = utteranceWord.match(message);
 
             if (match.score > 0 && match.hasEntity()) {
