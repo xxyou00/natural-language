@@ -40,7 +40,7 @@ Now you are ready to create a processor and load your configuration.
 LanguageProcessor   processor    = new LanguageProcessor();
 IntentMatcherLoader intentLoader = new IntentMatcherLoader();
 
-intentLoader.load(processor, "intents.xml");
+intentLoader.load(processor, new File("intents.xml"));
 ```
 
 To use the processor, simply call the `getIntent` method.
@@ -70,7 +70,7 @@ import nl.yannickl88.language.intent.Entity;
 import nl.yannickl88.language.EntityMatchable;
 import nl.yannickl88.language.matcher.EntityMatch;
 
-public class FoodItem implements EntityMatcherInterface {
+public class FoodItem implements EntityMatchable {
     private String[] items = new String[] {
         "pizza",
         "lasagna",
@@ -87,12 +87,6 @@ public class FoodItem implements EntityMatcherInterface {
 
         // No result, simply return an empty EntityMatch.
         return new EntityMatch();
-    }
-
-    @Override
-    public int hashCode() {
-        // Give it a class-unique hash code, this ensures only one entity per type.
-        return "Food.Item".hashCode();
     }
 }
 ```
