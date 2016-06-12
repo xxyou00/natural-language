@@ -123,7 +123,7 @@ if (intent.action.equals("Create.Order")) {
     if (null != item) {
         System.out.println("OK! Thanks for your order (" + item.value + ")");
     } else {
-        System.out.println("Sorry, you need to give me a number to order.");
+        System.out.println("Sorry, I didn't quite get that order.");
     }
 }
 ```
