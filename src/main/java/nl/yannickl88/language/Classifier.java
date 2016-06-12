@@ -12,7 +12,7 @@ class Classifier {
     private ArrayList<EntityMatchable> matchers;
     private int totalUtterances = 0, totalWords = 0;
 
-    public static ArrayList<String> getWords(String message) {
+    static ArrayList<String> getWords(String message) {
         Pattern p = Pattern.compile("([\\w\\a]+)");
         Matcher m = p.matcher(message);
         ArrayList<String> words = new ArrayList<>();
