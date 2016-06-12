@@ -15,8 +15,6 @@ An example of this would be:
     <!-- Greetings -->
     <intent action="Generic.Greeting">
         <utterance>hey</utterance>
-    </intent>
-    <intent action="Generic.Greeting">
         <utterance>hi</utterance>
     </intent>
 
