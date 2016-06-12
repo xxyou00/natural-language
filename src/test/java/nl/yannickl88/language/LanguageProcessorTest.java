@@ -2,9 +2,10 @@ package nl.yannickl88.language;
 
 import nl.yannickl88.language.intent.Intent;
 import nl.yannickl88.language.matcher.buildins.Number;
-import nl.yannickl88.language.matcher.buildins.StaticWord;
 import org.junit.Test;
 
+import java.io.File;
+import java.net.URISyntaxException;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -14,10 +15,10 @@ public class LanguageProcessorTest {
     public void testGetIntent() {
         LanguageProcessor processor = new LanguageProcessor();
 
-        IntentMatcher matcher1 = new IntentMatcher("Foo");
-        matcher1.addMatcher(new StaticWord("foo"));
-        IntentMatcher matcher2 = new IntentMatcher("Bar");
-        matcher2.addMatcher(new StaticWord("bar"));
+        Classifier matcher1 = new Classifier("Foo");
+        matcher1.addUtterance(Classifier.getWords("foo"));
+        Classifier matcher2 = new Classifier("Bar");
+        matcher2.addUtterance(Classifier.getWords("bar"));
         matcher2.addMatcher(new Number());
 
         processor.addIntentMatcher(matcher1);
@@ -44,5 +45,18 @@ public class LanguageProcessorTest {
 
         assertEquals("Bar", iBarEmpty.action);
         assertEquals(0, names.size());
+    }
+
+    @Test
+    public void testOrganic() throws URISyntaxException {
+        LanguageProcessor processor = new LanguageProcessor();
+        IntentMatcherLoader loader = new IntentMatcherLoader();
+
+        File testFile = new File(this.getClass().getClassLoader().getResource("organic.xml").toURI());
+
+        loader.load(processor, testFile);
+
+        assertEquals("Generic.Help", processor.getIntent("help").action);
+        assertEquals("Food.Create.Order", processor.getIntent("can I order pizza?").action);
     }
 }

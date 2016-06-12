@@ -1,6 +1,5 @@
 package nl.yannickl88.language;
 
-import nl.yannickl88.language.matcher.buildins.StaticWord;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -8,10 +7,6 @@ import org.w3c.dom.NodeList;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * This loader give the ability to load the configuration into the
@@ -41,15 +36,13 @@ public class IntentMatcherLoader {
                 }
 
                 NodeList intentMatchers = node.getChildNodes();
-                IntentMatcher intent = new IntentMatcher(node.getAttributes().getNamedItem("action").getNodeValue());
+                Classifier intent = new Classifier(node.getAttributes().getNamedItem("action").getNodeValue());
 
                 for (int j = 0; j < intentMatchers.getLength(); j++) {
                     Node matcher = intentMatchers.item(j);
 
                     if ("utterance".equals(matcher.getNodeName())) {
-                        for (String word : this.split(matcher.getTextContent())) {
-                            intent.addMatcher(new StaticWord(word));
-                        }
+                        intent.addUtterance(Classifier.getWords(matcher.getFirstChild().getTextContent()));
                     } else if ("matcher".equals(matcher.getNodeName())) {
                         EntityMatchable matcherLoader = this.getWordMatcherLoader(matcher.getFirstChild().getTextContent());
 
@@ -65,18 +58,6 @@ public class IntentMatcherLoader {
         } catch (Exception e) {
             return;
         }
-    }
-
-    private List<String> split(String message) {
-        Pattern p = Pattern.compile("([\\w\\a]+)");
-        Matcher m = p.matcher(message);
-        ArrayList<String> words = new ArrayList<>();
-
-        while (m.find()) {
-            words.add(m.group().toLowerCase());
-        }
-
-        return words;
     }
 
     private EntityMatchable getWordMatcherLoader(String matcherName) {

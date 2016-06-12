@@ -4,7 +4,11 @@ import nl.yannickl88.language.intent.Intent;
 import nl.yannickl88.language.matcher.EntityMatch;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * The Language Processor guesses the intent of a message based on it's
@@ -12,34 +16,42 @@ import java.util.List;
  *
  * @see IntentMatcherLoader
  */
-public class LanguageProcessor implements IntentMatcherLoadable {
-    private List<IntentMatcher> intentMatchers;
+public class LanguageProcessor implements LanguageProcessable, IntentMatcherLoadable {
+    private HashMap<String, Classifier> classifiers;
+    private HashSet<String> uniqueWords;
+    private int totalUtterances;
 
     public LanguageProcessor() {
-        this.intentMatchers = new ArrayList<>();
+        classifiers = new HashMap<>();
+        uniqueWords = new HashSet<>();
     }
 
-    public void addIntentMatcher(IntentMatcher intent) {
-        this.intentMatchers.add(intent);
-    }
-
-    /**
-     * Return the intent of a message. This is based all configured intents in
-     * the processor and selects the best matching Intent. If no match can be
-     * found, an Intent with action "None" is returned.
-     */
+    @Override
     public Intent getIntent(String message) {
-        float score = 0.0f;
+        double score = 0.0;
         Intent best = new Intent("None");
 
-        for (IntentMatcher intentMatcher : intentMatchers) {
+        for (String key : classifiers.keySet()) {
             IntentBuilder builder = new IntentBuilder();
-            builder.setAction(intentMatcher.action);
+            builder.setAction(key);
 
-            float intentScore = score(message, builder, intentMatcher);
+            Classifier classifier = classifiers.get(key);
+            double total = (classifier.getTotalUtterances() + 1) / (double) (totalUtterances + 1);
 
-            if (intentScore > score) {
-                score = intentScore;
+            for (String word : Classifier.getWords(message)) {
+                total *= (double) (classifier.getWordCount(word) + 1) / (classifier.getTotalWords() + uniqueWords.size());
+            }
+
+            if (total > score) {
+                score = total;
+
+                for (EntityMatchable matcher : classifier.getMatchers()) {
+                    EntityMatch match = matcher.match(message);
+
+                    if (match.score > 0 && match.hasEntity()) {
+                        builder.addEntity(match.getEntityType(), match.getEntity());
+                    }
+                }
                 best = builder.createIntent();
             }
         }
@@ -47,21 +59,10 @@ public class LanguageProcessor implements IntentMatcherLoadable {
         return best;
     }
 
-    private float score(String message, IntentBuilder intent, IntentMatcher intentMatcher) {
-        float score = 0.0f;
-        int count   = 0;
-
-        for (EntityMatchable utteranceWord : intentMatcher.getWords()) {
-            EntityMatch match = utteranceWord.match(message);
-
-            if (match.score > 0 && match.hasEntity()) {
-                intent.addEntity(match.getEntityType(), match.getEntity());
-            }
-
-            score += match.score;
-            count++;
-        }
-
-        return score / (float) count;
+    @Override
+    public void addIntentMatcher(Classifier classifier) {
+        classifiers.put(classifier.action, classifier);
+        totalUtterances += classifier.getTotalUtterances();
+        uniqueWords.addAll(classifier.getWords());
     }
 }

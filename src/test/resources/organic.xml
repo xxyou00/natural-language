@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE intents PUBLIC "-//yannickl88//DTD Intents//EN"
+  "https://yannickl88.github.io/natural-language/intents.dtd">
+
+<intents>
+
+    <!-- Greetings -->
+    <intent action="Generic.Greeting">
+        <utterance>hello</utterance>
+        <utterance>hey</utterance>
+        <utterance>hi</utterance>
+    </intent>
+
+    <!-- Help -->
+    <intent action="Generic.Help">
+        <utterance>help</utterance>
+    </intent>
+
+    <!-- Food orderings -->
+    <intent action="Food.Create.Order">
+        <utterance>order for me</utterance>
+        <utterance>can I order</utterance>
+    </intent>
+
+    <!-- Food queries -->
+    <intent action="Food.Query.Order">
+        <utterance>what did I order</utterance>
+    </intent>
+
+</intents>

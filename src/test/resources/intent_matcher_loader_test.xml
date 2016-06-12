@@ -7,8 +7,6 @@
     <!-- Just Utterances -->
     <intent action="Foo.Bar">
         <utterance>Foo Bar</utterance>
-    </intent>
-    <intent action="Foo.Bar">
         <utterance>Baz</utterance>
     </intent>
 

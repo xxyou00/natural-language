@@ -1,7 +1,5 @@
 package nl.yannickl88.language;
 
-import nl.yannickl88.language.matcher.buildins.Number;
-import nl.yannickl88.language.matcher.buildins.StaticWord;
 import org.junit.Test;
 
 import java.io.File;
@@ -16,10 +14,10 @@ public class IntentMatcherLoaderTest {
     public void testLoad() throws URISyntaxException {
         IntentMatcherLoader loader = new IntentMatcherLoader();
 
-        ArrayList<IntentMatcher> intentMatchers = new ArrayList<>();
+        ArrayList<Classifier> intentMatchers = new ArrayList<>();
         IntentMatcherLoadable processor = new IntentMatcherLoadable() {
             @Override
-            public void addIntentMatcher(IntentMatcher intent) {
+            public void addIntentMatcher(Classifier intent) {
                 intentMatchers.add(intent);
             }
         };
@@ -28,49 +26,45 @@ public class IntentMatcherLoaderTest {
 
         loader.load(processor, testFile);
 
-        assertEquals(4, intentMatchers.size());
+        assertEquals(3, intentMatchers.size());
 
-        List<EntityMatchable> words;
+        List<String> words;
+        List<EntityMatchable> matchers;
 
         // first
         assertEquals("Foo.Bar", intentMatchers.get(0).action);
         words = intentMatchers.get(0).getWords();
-        assertEquals(2, words.size());
-        assertEquals(true, words.get(0) instanceof StaticWord);
-        assertEquals(true, words.get(1) instanceof StaticWord);
-        assertEquals("foo", ((StaticWord) words.get(0)).word);
-        assertEquals("bar", ((StaticWord) words.get(1)).word);
-
-        // second
-        assertEquals("Foo.Bar", intentMatchers.get(1).action);
-        words = intentMatchers.get(1).getWords();
-        assertEquals(1, words.size());
-        assertEquals(true, words.get(0) instanceof StaticWord);
-        assertEquals("baz", ((StaticWord) words.get(0)).word);
+        matchers = intentMatchers.get(0).getMatchers();
+        assertEquals(3, words.size());
+        assertEquals(0, matchers.size());
+        assertEquals("foo", words.get(1));
+        assertEquals("bar", words.get(0));
+        assertEquals("baz", words.get(2));
 
         // third
-        assertEquals("Foo.Number", intentMatchers.get(2).action);
-        words = intentMatchers.get(2).getWords();
-        assertEquals(1, words.size());
-        assertEquals(true, words.get(0) instanceof Number);
+        assertEquals("Foo.Number", intentMatchers.get(1).action);
+        words = intentMatchers.get(1).getWords();
+        matchers = intentMatchers.get(1).getMatchers();
+        assertEquals(0, words.size());
+        assertEquals(1, matchers.size());
 
         // forth
-        assertEquals("Foo.All", intentMatchers.get(3).action);
-        words = intentMatchers.get(3).getWords();
-        assertEquals(2, words.size());
-        assertEquals(true, words.get(0) instanceof StaticWord);
-        assertEquals(true, words.get(1) instanceof Number);
-        assertEquals("foobar", ((StaticWord) words.get(0)).word);
+        assertEquals("Foo.All", intentMatchers.get(2).action);
+        words = intentMatchers.get(2).getWords();
+        matchers = intentMatchers.get(2).getMatchers();
+        assertEquals(1, words.size());
+        assertEquals(1, matchers.size());
+        assertEquals("foobar", words.get(0));
     }
 
     @Test
     public void testLoadBadMethod() throws URISyntaxException {
         IntentMatcherLoader loader = new IntentMatcherLoader();
 
-        ArrayList<IntentMatcher> intentMatchers = new ArrayList<>();
+        ArrayList<Classifier> intentMatchers = new ArrayList<>();
         IntentMatcherLoadable processor = new IntentMatcherLoadable() {
             @Override
-            public void addIntentMatcher(IntentMatcher intent) {
+            public void addIntentMatcher(Classifier intent) {
                 intentMatchers.add(intent);
             }
         };
@@ -83,7 +77,7 @@ public class IntentMatcherLoaderTest {
 
         // first
         assertEquals("Foo.Evil", intentMatchers.get(0).action);
-        List<EntityMatchable> words = intentMatchers.get(0).getWords();
+        List<String> words = intentMatchers.get(0).getWords();
         assertEquals(0, words.size());
     }
 
@@ -91,10 +85,10 @@ public class IntentMatcherLoaderTest {
     public void testLoadBadFormat() throws URISyntaxException {
         IntentMatcherLoader loader = new IntentMatcherLoader();
 
-        ArrayList<IntentMatcher> intentMatchers = new ArrayList<>();
+        ArrayList<Classifier> intentMatchers = new ArrayList<>();
         IntentMatcherLoadable processor = new IntentMatcherLoadable() {
             @Override
-            public void addIntentMatcher(IntentMatcher intent) {
+            public void addIntentMatcher(Classifier intent) {
                 intentMatchers.add(intent);
             }
         };
