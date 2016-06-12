@@ -40,7 +40,7 @@ Now you are ready to create a processor and load your configuration.
 LanguageProcessor   processor    = new LanguageProcessor();
 IntentMatcherLoader intentLoader = new IntentMatcherLoader();
 
-intentLoader.load(processor, "intents.xml");
+intentLoader.load(processor, new File("intents.xml"));
 ```
 
 To use the processor, simply call the `getIntent` method.
@@ -60,7 +60,7 @@ if (intent.action.equals("Create.Order")) {
 And that is it.
 
 ## Custom entities
-To create your own Entities to use in intents, simply implement the `EntityMatcherInterface` and you can start using this in your intents. The `<matcher></matcher>` tags accept a fully qualified namespace for your class.
+To create your own Entities to use in intents, simply implement the `EntityMatchable` interface and you can start using this in your intents. The `<matcher></matcher>` tags accept a fully qualified namespace for your class.
 
 For example, if you need an order item:
 ```java
@@ -70,7 +70,7 @@ import nl.yannickl88.language.intent.Entity;
 import nl.yannickl88.language.EntityMatchable;
 import nl.yannickl88.language.matcher.EntityMatch;
 
-public class FoodItem implements EntityMatcherInterface {
+public class FoodItem implements EntityMatchable {
     private String[] items = new String[] {
         "pizza",
         "lasagna",
@@ -87,12 +87,6 @@ public class FoodItem implements EntityMatcherInterface {
 
         // No result, simply return an empty EntityMatch.
         return new EntityMatch();
-    }
-
-    @Override
-    public int hashCode() {
-        // Give it a class-unique hash code, this ensures only one entity per type.
-        return "Food.Item".hashCode();
     }
 }
 ```
@@ -129,7 +123,7 @@ if (intent.action.equals("Create.Order")) {
     if (null != item) {
         System.out.println("OK! Thanks for your order (" + item.value + ")");
     } else {
-        System.out.println("Sorry, you need to give me a number to order.");
+        System.out.println("Sorry, I didn't quite get that order.");
     }
 }
 ```
