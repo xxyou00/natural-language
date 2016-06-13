@@ -31,6 +31,9 @@ public class Intent {
     /**
      * Return an entity based on the name. If no entity with the name is found,
      * NULL is returned.
+     *
+     * @param s Get the Entity for the given Entity name
+     * @return Return the entity, or NULL of none was set
      */
     public Entity getEntity(String s) {
         return entities.get(s);
@@ -38,6 +41,8 @@ public class Intent {
 
     /**
      * Return all entity names that are associated with this intent.
+     *
+     * @return All Entity names that were found for the intent
      */
     public List<String> getEntityNames() {
         return new ArrayList<>(entities.keySet());

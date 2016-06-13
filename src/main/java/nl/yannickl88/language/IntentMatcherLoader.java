@@ -18,6 +18,9 @@ import java.io.File;
 public class IntentMatcherLoader {
     /**
      * Load a configuration file into the given LanguageProcessor.
+     *
+     * @param processor Processor to load the file into
+     * @param file File containing processor configuration.
      */
     public void load(IntentMatcherLoadable processor, File file) {
         try {

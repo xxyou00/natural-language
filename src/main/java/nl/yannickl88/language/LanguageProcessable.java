@@ -11,6 +11,9 @@ public interface LanguageProcessable {
      * Return the intent of a message. This is based all configured intents in
      * the processor and selects the best matching Intent. If no match can be
      * found, an Intent with action "None" is returned.
+     *
+     * @param message Message to process
+     * @return Intent of the given message
      */
     Intent getIntent(String message);
 }
