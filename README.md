@@ -1,6 +1,21 @@
 # natural-language
 Small library for natural language parsing. This project was heavily inspired by the Microsoft Bot Framework in combination with their LUIS service.
 
+## Installation
+
+To install, simply add the maven dependency for this project:
+```xml
+<dependency>
+  <groupId>nl.yannickl88</groupId>
+  <artifactId>natural-language</artifactId>
+  <version>1.0.0</version>
+  <scope>compile</scope>
+</dependency>
+```
+
+Or simply down the `jar` file to include in your project
+http://repo1.maven.org/maven2/nl/yannickl88/natural-language/1.0.0/natural-language-1.0.0.jar
+
 ## Usage
 First you need to create your intent file. This is an XML describing the intents you are planning to use in your application.
 
